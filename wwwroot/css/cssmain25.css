@@ -1,0 +1,40 @@
+.bg-pink-primary{
+    background-color:#ec00ec;
+    color: #fff;
+}
+.bg-pink-secondary{
+    background-color:#ff00ff;
+    color: #000000;
+}
+
+.bg-dark-primary{
+    background-color:#000000;
+    color: #fff;
+}
+
+.bg-dark-secondary{
+    background-color:#333333;
+    color: #000;
+}
+
+.bg-light-primary{
+    background-color:#f4f4f4;
+    color: #000000;
+}
+
+.bg-light-secondary{
+    background-color:#f9f9f9;
+    color: #000000;
+}
+
+
+.l2r-angle{
+    rotate: 45deg;
+    -webkit-transform: rotate(45deg);
+}
+
+.r2l-angle{
+    rotate: -45deg;
+    -webkit-transform: rotate(-45deg);
+}
+
