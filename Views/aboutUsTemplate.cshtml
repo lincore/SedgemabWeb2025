@@ -8,6 +8,10 @@
   Layout = "master.cshtml";
 }
 @{
+
+ var aboutusContent = Umbraco.Content(Guid.Parse("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12"));
+
+
   // Fetch the Portfolio page by GUID
   var portfolioRoot = Umbraco.Content(Guid.Parse("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12"));
 
@@ -33,9 +37,9 @@
   .ToList();
 
   var projectRoot = Umbraco.Content(Guid.Parse("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12"));
-  
-var parentNode = Umbraco.Content("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12");
-var recentProjects = parentNode.Children.Where(x => x.Value<bool>("isProject") == true).Take(3).ToList();
+
+  var parentNode = Umbraco.Content("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12");
+  var recentProjects = parentNode.Children.Where(x => x.Value<bool>("isProject") == true).Take(3).ToList();
 
 
 
@@ -75,8 +79,7 @@ var recentProjects = parentNode.Children.Where(x => x.Value<bool>("isProject") =
 <div class="row">
   <div class="col-12">
     <div class="hero-image text-center">
-      <img src="/media/moxniwk0/man-engine-2016.jpg" alt="TESTER"
-        class="img-responsive">
+      <img src="/media/moxniwk0/man-engine-2016.jpg" alt="TESTER" class="img-responsive">
       <div class="serviceshero-text">
         <p>About Us</p>
       </div>
@@ -122,26 +125,8 @@ var recentProjects = parentNode.Children.Where(x => x.Value<bool>("isProject") =
   </div>
 </div>
 
-<div class="abouttext">
-  <p>Chris Sedgeman Scaffolding LTD, founded in 1996 by Chris Sedgeman, Steven Sedgeman and Steven
-    Wallis.
-    Our 3 founders were drawn together by shared philosophy focused on providing bespoke scaffolding solutions
-    prioritising high-quality workmanship and safety.
-    Over time, the company expanded significantly, incorporating two large scaffolding groups in December of 2000.
-    Today the company is recognised for its work across multiple sectors ,including large scale commercial and
-    domestic
-    projects.
-  </p>
-  <p>
-    With a commitment to safety Sedgeman has secured contracts with well-known clients such as the Ministry of
-    Defense,
-    Tate Gallery and National Grid.
-    Certified by leading industry bodies CITB, CHAS and NASC, Chris Sedgeman Scaffolding upholds rigourous standards
-    in
-    every project.
-    Our ethos revolves around a client-first approach, ensuring your prefrences and oncerns are adressed properly with
-    trust in every step we take
-  </p>
+<div class="abouttext pb-4">
+ @aboutusContent.Value("htmlcontent")
 </div>
 
 <div class=" transparent-bg">
@@ -251,7 +236,7 @@ var recentProjects = parentNode.Children.Where(x => x.Value<bool>("isProject") =
         <div class="timeline-content">
           <img src="/media/bfwbbrnt/1990mineicon.png" alt="Bottallack Mine">
           <h3>1996 - Our First Project</h3>
-          <p>Bottallack mine in St. Just was Chris's first project. The logo reflects this strong connection to
+          <p>Bottallack mine in St. Just was Chris's first project. Our logo reflects this strong connection to
             Cornwall's mining heritage.</p>
         </div>
       </div>
@@ -271,7 +256,7 @@ var recentProjects = parentNode.Children.Where(x => x.Value<bool>("isProject") =
         <div class="timeline-content">
           <img src="/media/oczmljj5/dscf0258.jpg" alt="Crofty Mine">
           <h3>2013 - Crofty Mine</h3>
-          <p>One of the first large-scale specialist projects that we remain proud of!</p>
+          <p>One of the first large-scale specialist projects that we remain proud of !</p>
         </div>
       </div>
       <div class="timeline-item" data-year="2014">
@@ -306,13 +291,13 @@ var recentProjects = parentNode.Children.Where(x => x.Value<bool>("isProject") =
       <h2 class="services-title">Our Awards</h2>
       <h3 class="award-header">Celebrating Success and Industry Recognition</h3>
       <p class="service-text">
-        At Chris Sedgman Scaffolding, we take pride in delivering scaffolding solutions with a focus on safety,
+        At Chris Sedgeman Scaffolding, we take pride in delivering scaffolding solutions with a focus on safety,
         reliability and innovation. Our dedication to excellence is reflected in the industry awards won below ,
-        showcasing our success and commitment to high standards. As proud members of the NASC (National Access
+        showcasing our success and commitment to high standards. As a proud member of the NASC (National Access
         and
         Scaffolding Confederation), we meet the strictest industry regulations, highlighting our position as a
         leading
-        scaffolding company in the Soth West. These achievements demonstrate not only our success within
+        scaffolding company in the South West. These achievements demonstrate not only our success within
         scaffolding
         but
         also the trust our clients place in us for projects of all sizes.
@@ -411,7 +396,7 @@ var recentProjects = parentNode.Children.Where(x => x.Value<bool>("isProject") =
     </div>
   </div>
   <div class="projects-grid">
-    @foreach (var project in recentProjects.Take(3))  // Limit to 3 projects
+    @foreach (var project in recentProjects.Take(3)) // Limit to 3 projects
     {
       var isProject = project.Value<bool>("isProject"); // Assuming 'isProject' is a boolean property
       var thumb = project.Value<MediaWithCrops>("thumb");
@@ -421,14 +406,15 @@ var recentProjects = parentNode.Children.Where(x => x.Value<bool>("isProject") =
       // Only render the project if isProject is true
       @if (isProject)
       {
-        <div class="card more-project-card">  <!-- Added custom class here -->
+        <div class="card more-project-card"> <!-- Added custom class here -->
           <div class="card-body">
             @if (thumb != null)
             {
               <img src="@thumb.MediaUrl()" class="more-inline" alt="@projectTitle">
             }
             <h5 class="card-title">@projectTitle</h5>
-            <a href="@projectUrl" class="btn" style="background-color: #e6007e; color: #fff;" target="_blank">View Project</a>
+            <a href="@projectUrl" class="btn" style="background-color: #e6007e; color: #fff;" target="_blank">View
+              Project</a>
           </div>
         </div>
       }
@@ -498,39 +484,39 @@ var recentProjects = parentNode.Children.Where(x => x.Value<bool>("isProject") =
 
 <script>
 
- function toggleTimeline() { 
-    const timelineContent = document.getElementById("timelineContent");
-    const dropdownIcon = document.getElementById("dropdown-icon");
-    
-    if (timelineContent.classList.contains("show")) {
+    function toggleTimeline() {
+      const timelineContent = document.getElementById("timelineContent");
+      const dropdownIcon = document.getElementById("dropdown-icon");
+
+      if (timelineContent.classList.contains("show")) {
         timelineContent.style.maxHeight = "0px";
         timelineContent.style.opacity = "0";
         timelineContent.classList.remove("show");
 
         // Force reflow for ::before elements
         document.querySelectorAll(".timeline-item::before").forEach(item => {
-            item.style.opacity = "0";
+          item.style.opacity = "0";
         });
 
         setTimeout(() => {
-            timelineContent.style.display = "none";
+          timelineContent.style.display = "none";
         }, 500); // Wait for transition to end
         dropdownIcon.style.transform = "rotate(0deg)";
-    } else {
+      } else {
         timelineContent.style.display = "block";
         setTimeout(() => {
-            timelineContent.style.maxHeight = timelineContent.scrollHeight + "px"; 
-            timelineContent.style.opacity = "1";
+          timelineContent.style.maxHeight = timelineContent.scrollHeight + "px";
+          timelineContent.style.opacity = "1";
 
-            // Make sure year labels reappear
-            document.querySelectorAll(".timeline-item::before").forEach(item => {
-                item.style.opacity = "1";
-            });
+          // Make sure year labels reappear
+          document.querySelectorAll(".timeline-item::before").forEach(item => {
+            item.style.opacity = "1";
+          });
         }, 10);
 
         timelineContent.classList.add("show");
         dropdownIcon.style.transform = "rotate(180deg)";
+      }
     }
-}
 
 </script>

@@ -2589,7 +2589,7 @@ figcaption {
 
 /* Google maps  */
 
-.contactus-sizing {
+.contact-us-sizing {
     width: 50%;
     height: 80%;
     object-fit: cover;
@@ -2612,7 +2612,7 @@ figcaption {
 /* Medium screens (tablets) */
 @media (min-width: 768px) {
 
-    .contactus-sizing {
+    .contact-us-sizing {
         max-height: 150px;
         /* Reduce height */
         max-width: 150px;
@@ -2642,7 +2642,7 @@ figcaption {
 /* Large screens (desktops) */
 @media (min-width: 992px) {
 
-    .contactus-sizing {
+    .contact-us-sizing {
         max-height: 350px;
         /* Reduce height */
         max-width: 350px;
