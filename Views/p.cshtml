@@ -1,0 +1,28 @@
+﻿
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Umbraco.Cms.Core.Models.PublishedContent
+
+@{
+      Layout = "master.cshtml";
+
+    // Fetch the Privacy Policy content dynamically
+    var privacyPolicyPage = Umbraco.Content(Guid.Parse("dade31f9-2d92-404a-a51c-13360ec65e47"));
+}
+
+@if (privacyPolicyPage != null)
+{
+    <section class="privacy-policy">
+        <h1>@privacyPolicyPage.Value("title")</h1> <!-- Dynamically getting the Title -->
+        
+        <div class="content">
+            @privacyPolicyPage.Value("policytext") <!-- Dynamically getting the Policy Text -->
+        </div>
+    </section>
+}
+else
+{
+    <section>
+        <h1>Privacy Policy</h1>
+        <p>Privacy Policy content not found. Please check if the page exists in Umbraco.</p>
+    </section>
+}

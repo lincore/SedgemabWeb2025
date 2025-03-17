@@ -1,8 +1,447 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+﻿@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Media.EmbedProviders;
+@using NPoco.Expressions;
+
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
-	Layout = "Master.cshtml";
+	Layout = "master.cshtml";
+
+}
+
+@{
+
+
+	var rootpagedata = Umbraco.Content(Guid.Parse("c2da9be4-49d2-468e-9f0c-fa009cf1f023"));
+
+
+
+	void RenderRootSection(IPublishedContent? rootContent)
+	{
+
+		if (rootContent != null)
+		{
+			var list = rootContent.Value<IEnumerable<MediaWithCrops>>("gallery");
+
+			if (list != null)
+			{
+				foreach (var typed in list)
+				{
+					if (typed != null)
+					{
+						<div class="col-12 col-md-6 col-lg-4 mb-3">
+							<img class="img-fluid w-100" src="@typed.MediaUrl()?width=400&height=300&quality=30&format=jpg" alt="todo">
+						</div>
+					}
+				}
+			}
+		}
+	}
+
+	void RenderBlogSection(IEnumerable<IPublishedContent> list)
+	{
+		<div class="blog-container">
+			@foreach (var articleitem in list)
+			{
+				<div class=" blog-item">
+					@{
+						var typed = articleitem.Value<MediaWithCrops>("thumb");
+						if (typed != null)
+						{
+							<img src="@typed.MediaUrl()">
+						}
+					}
+					<div class=" blog-content">
+						<h2>@articleitem.Value("shorttext") </h2>
+						<a class="read-more" href="@articleitem.Url()">@articleitem.Value("title")</a>
+					</div>
+				</div>
+			}
+		</div>
+	}
+
+	void RenderHomeBlogSection(IEnumerable<IPublishedContent> list)
+	{
+
+		@foreach (var articleitem in list)
+		{
+			<div class=" blog-item">
+				@{
+					var typed = articleitem.Value<MediaWithCrops>("thumb");
+					if (typed != null)
+					{
+						<img src="@typed.MediaUrl()">
+					}
+				}
+				<div class=" blog-content">
+					<h2>@articleitem.Value("shorttext") </h2>
+					<a class="read-more" href="@articleitem.Url()">@articleitem.Value("title")</a>
+				</div>
+			</div>
+		}
+
+	}
+
+
+	void RenderServicesLinkSection(IEnumerable<IPublishedContent> list)
+	{
+
+		@foreach (var item in list)
+		{
+			<div class="col-12 col-md-4 mb-3">
+				<a href="@item.Url()" class="newservice-link">
+					<div class="newservice-card">
+						@{
+							var typed = item.Value<MediaWithCrops>("thumb");
+							if (typed != null)
+							{
+								<img src="@typed.MediaUrl()" alt="@item.Value("title")" class="img-fluid">
+							}
+						}
+						<div class="newoverlay">
+							<h3>@item.Value("title")</h3>
+						</div>
+					</div>
+				</a>
+			</div>
+		}
+	}
+
+
+
+
+	void RenderLeader(IPublishedContent leadarticle)
+	{
+
+		var typedl = leadarticle.Value<MediaWithCrops>("thumb");
+
+		<section class="featured">
+			<img src="@typedl.MediaUrl()" alt="featureimage">
+			<div class="featured-text">
+				<p>
+					@Html.Raw(leadarticle.CreateDate.ToLongDateString())
+				</p>
+				<h2>@leadarticle.Value("title") </h2>
+				<h3>@leadarticle.Value("shorttext")</h3>
+			</div>
+		</section>
+	}
+
+	void RenderWideLeader(IPublishedContent leadarticle)
+	{
+
+		var leader = leadarticle.Value<MediaWithCrops>("thumb");
+
+		<div class="blog-item-wide">
+			<img src="@leader.MediaUrl()" alt="featureimage">
+			<div class="blog-content">
+				<h2>@leadarticle.Value("title")</h2>
+				<a href="@leadarticle.Url()" class="read-more">Read More</a>
+			</div>
+		</div>
+	}
+
 }
 
 
-root template root
+<div class="hero-image text-center">
+	<img src="/media/p0peths2/st-michaels-24-2.jpg" alt="TESTER" class="img-fluid">
+	<div class="homehero-text">
+		<p id="elevate">Elevate Your <br>Project </p>
+		<a href="/services" class="homecta-button">Learn more about our services</a>
+	</div>
+</div>
+
+
+<div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 text-center gap2">
+	<div class="col"><img src="/media/ficlohx0/untitled-3.png" class="img-fluid shrink-image-new">
+		<p>Guaranteed Safety with fully CITB certified staff</p>
+	</div>
+
+	<div class="col"><img src="/media/px2fykv5/homeyearsicon.png" class="img-fluid shrink-image-new">
+		<p>Over 40 years of experience</p>
+	</div>
+
+	<div class="col"><img src="/media/ox3jrk1f/homeerectionicon.png" class="img-fluid shrink-image-new">
+		<p>Prompt Erection and Dismantling</p>
+	</div>
+
+	<div class="col">
+		<div class="sizing-portfolio-icons"><img src="/media/i4qbb3o5/pin-icon.png" class="img-fluid shrink-image-new ">
+		</div>
+		<P>Founded & Based in Cornwall </P>
+	</div>
+	<div class="col">
+		<div class="sizing-portfolio-icons"><img src="/media/zgyp4gwd/builtonreputationicon.png"
+				class="img-fluid shrink-image-new "></div>
+		<P> Built on Reputation </p>
+	</div>
+	<div class="col"><img src="/media/tuvhjupz/40-employee-icon_.png" class="img-fluid shrink-image-new">
+		<p>Over 40 trusted employees</p>
+	</div>
+</div>
+
+<div class="home-pinksection">
+	<p class="main-text">
+		We provide access scaffolding for <span class="highlighted">Domestic, Commercial,</span> and <span
+			class="highlighted">Specialist</span> projects at a professional standard.
+	</p>
+	<p class="sub-text">
+		Our operatives are trained and certified by the <span class="highlighted">CITB</span>. We are members of the
+		<span class="highlighted">NASC</span>, <span class="highlighted">CHAS</span>, and <span
+			class="highlighted">Achilles</span> and have our <span class="highlighted italic">own in-house
+			designer</span>.
+	</p>
+</div>
+
+<div>
+	<div class="colored-section black">
+		<div class="d-flex justify-content-end">
+			<div class="widget">
+				<div class="home-projectstyle">
+					<p class="white-text">YOUR PROJECT,<br> OUR SCAFFOLDING</p>
+					<div class="mx-auto">
+						<a href="/portfolio" class="btn btn-primary pink-button">Our Portfolio</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="about-us-title">
+		<div class="black-container">
+			<div class="diagonal-container bg-white d-flex flex-wrap justify-content-center text-center">
+
+				<div class="img-float">
+					<img src="/media/amilv5gk/heritage.png" alt="Heritage Services" class="img-fluid">
+					<p class="img-title">Heritage Services</p>
+				</div>
+
+				<div class="img-float">
+					<img src="/media/zm2hptez/electricity.png" alt="Electricity" class="img-fluid">
+					<p class="img-title">Power Infrastructure </p>
+				</div>
+
+				<div class="img-float">
+					<img src="/media/vkaawjlx/rail-works_.png" alt="Rail Works" class="img-fluid">
+					<p class="img-title">Rail Works</p>
+				</div>
+
+				<div class="img-float">
+					<img src="/media/lz4nptew/contractors_.png" alt="Building Contractors" class="img-fluid">
+					<p class="img-title">Building Contractors</p>
+				</div>
+
+				<div class="img-float">
+					<img src="/media/jcefm4dr/local-authority-housing_.png" alt="Local Authority Housing"
+						class="img-fluid">
+					<p class="img-title">Local Authority Housing</p>
+				</div>
+
+				<div class="img-float">
+					<img src="/media/efqlmwtr/waterworks.png" alt="Water Works" class="img-fluid">
+					<p class="img-title">Water Works</p>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+
+
+	<div class="container w-80 mx-auto">
+
+		<div class="row justify-content-center my-2 gap2">
+
+			@{
+				RenderRootSection(rootpagedata);
+			}
+
+			<div class="content-section">
+				<div class="row">
+					<div class="col pb-5">
+						<h2 class="services-title">OUR SERVICES</h2>
+						<p class="service-text">
+							Whether you're working on a small residential project, a specialist project, or a
+							large-scale
+							commercial
+							development, we believe that the trust and loyalty of our clients are the foundation of our
+							continued
+							growth and success. Your project is our priority, and we stand by our reputation for quality
+							and
+							service
+							built over decades.
+						</p>
+					</div>
+				</div>
+
+				<div class="vimeo-item-wide">
+					<iframe
+						src="https://player.vimeo.com/video/983049572?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+						frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
+						title="St Michaels Mount 2024">
+					</iframe>
+				</div>
+
+				<div class="container my-5">
+					<div class="row justify-content-center">
+						@{
+							var servicesSubPages =
+							Umbraco.Content(Guid.Parse("ee7c4209-afa6-4391-bdbe-3dad0321bded")).Children();
+							RenderServicesLinkSection(servicesSubPages);
+						}
+					</div>
+				</div>
+
+				<div class="content-section">
+					<a href="/services" class="portfolio-button centralbutton">Explore all Services</a>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div class=" oldheritage">
+
+		<div class="home-projectstyle"> Our Heritage </div>
+
+
+		<p class="service-text">
+			Founded in 1996 by Chris Sedgeman, Steven Wallis and Steven Sedgeman. restoring Bottallak mine was
+			one of our first projects .
+
+			Our scaffolding company started with a shared vision of providing reliable and safe scaffolding
+			solutions. Over the years, our commitment to quality and safety has helped us grow into a trusted
+			industry leader.
+
+			Today, with a dedicated team of over 40 skilled employees and continuing to expand, we remain
+			focused on
+			delivering exceptional service to projects of all sizes. Our strong foundation in family values and
+			teamwork continues to drive our growth and success.
+		</p>
+	</div>
+
+
+
+	<div class="pinkbackgroud-container">
+		<div class="d-flex justify-content-end">
+			<a href=" /about-us" class="whitetoblackbutton"> Find out more </output></a>
+		</div>
+		<div class="diagonal-container bg-white">
+
+
+			<div class="diagonal-container bg-white">
+				<div class="img-float"><img src="/media/1neknztg/constructionlinewebicon1.png"
+						alt="Constructionlinegold" class="img-fluid"></div>
+
+				<div class="img-float"><img src="/media/5hbdwpvz/nascwebicon.png" alt="NASCblueletttering"
+						class="img-fluid"></div>
+
+				<div class="img-float"><img src="/media/hbajrpfs/achillieswebicon1.png" alt="Achilliesnew"
+						class="img-fluid"></div>
+
+				<div class="img-float"><img src="/media/120mp4aq/chaspurple1.png" alt="CHAS" class="img-fluid"></div>
+
+				<div class="img-float"><img src="/media/kswkwumj/buildersprofile1.png" alt="Builders Profile"
+						class="img-fluid"></div>
+
+				<div class="img-float"><img src="/media/z2ecxm2d/ssiplogo1.png" alt="SSIP"
+						class="img-fluid marginsmaller">
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="excellence">
+		<div class="since96 " <h2>Scaffolding Exellence Since 96'</h2>
+		</div>
+		<div class="d-flex justify-content-start">
+			<a href=" /about-us" class="read-more">About our History of Success</a>
+		</div>
+	</div>
+	<div class="blog-section">
+		<div class="blog-header">
+			<h1>Blog</h1>
+		</div>
+		<div class="blog-container">
+			<!-- Top Row: Three Squares -->
+
+
+
+			@{
+				var bloghomeitems = Umbraco.Content(Guid.Parse("73847bcf-5ec7-4db7-9fb3-9d10d94021c7")).Children().Where(x
+				=>
+				x.GetProperty("showOnHome").GetValue().ToString().ToLower() == "true").OrderByDescending(x => x.CreateDate);
+
+
+				RenderHomeBlogSection(bloghomeitems);
+
+
+			}
+
+			@{
+				var blogpage = Umbraco.Content(Guid.Parse("73847bcf-5ec7-4db7-9fb3-9d10d94021c7"));
+
+				if (blogpage != null)
+				{
+					RenderWideLeader(blogpage);
+				}
+			}
+
+
+
+			<!-- Button -->
+			<div class="blog-footer">
+				<a href="/blog" class="explore-btn">Explore more articles and latest News</a>
+			</div>
+
+		</div>
+
+		<hr class="custom-hr">
+
+		<div class="row text-center g-0 mt-0">
+
+			<div class="col-12 col-sm-4">
+
+
+				<div id="xyz" name="xyz" class="card border-0">
+					<div style="max-width: 150px; max-height: 150px;margin:2rem auto;">
+						<img src="/media/yksbzrfc/quote-icon_150x150.png" class="card-img-top">
+					</div>
+					<div class="card-body">
+						<a href="https://www.surveymonkey.com/r/HZN5S3X" class="footer-btn">QUOTE REQUEST FORM</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-12 col-sm-4">
+
+				<div class="card border-0">
+					<div style="max-width: 150px; max-height: 150px;margin:2rem auto;">
+						<img src="/media/05odxhuj/email_icon_150x150.png" alt="CONTACT INFORMATION"
+							class="card-img-top">
+					</div>
+					<div class="card-body">
+						<a href="/contact-us" class="footer-btn">CONTACT INFORMATION</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-12 col-sm-4">
+				<div class="card border-0">
+					<div style="max-width: 150px; max-height: 150px;margin:2rem auto;">
+						<img src="/media/sjmpijdo/map-_icon_150x150.png" class="card-img-top">
+					</div>
+
+					<div class="card-body">
+						<a href="/contact-us" class="footer-btn">YOU'LL FIND US HERE</a>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+
+	</div>

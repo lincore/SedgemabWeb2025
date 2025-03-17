@@ -1,0 +1,20 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Umbraco.Cms.Core.Models.PublishedContent
+@{
+	Layout = "policies.cshtml";
+}
+@{
+    var cookiePolicyPage = Umbraco.Content(Guid.Parse("0feec4fe-f5a0-43cb-a4c3-5392196a9300"));
+}
+
+@if (cookiePolicyPage != null)
+{
+    <h1>@cookiePolicyPage.Name</h1>
+    <div>
+        @cookiePolicyPage.Value("projectmainbodytext")  <!-- Adjust this to match your field alias -->
+    </div>
+}
+else
+{
+    <p>Cookie Policy not found.</p>
+}

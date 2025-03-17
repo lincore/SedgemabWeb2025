@@ -1,0 +1,292 @@
+﻿@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Web.Common.PublishedModels
+@using Umbraco.Cms.Core.Media.EmbedProviders
+@using NPoco.Expressions
+@using System.Text
+
+@using Umbraco.Cms.Core.Models.PublishedContent;
+@inject Umbraco.Cms.Core.Services.IMediaService MediaService
+
+
+
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+  Layout = "master.cshtml";
+}
+@{
+  // Fetch the Portfolio page by GUID
+  var portfolioRoot = Umbraco.Content(Guid.Parse("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12"));
+
+  // Retrieve all children (projects) of the Portfolio page
+  var specialistProjects = portfolioRoot
+  .Children()
+  .Where(x => x.IsVisible() && x.GetProperty("specialistProject")?.GetValue()?.ToString().ToLower() == "true")
+  .OrderByDescending(r => r.CreateDate)
+  .ToList();
+
+  // Retrieve commercial projects (where 'commercialProject' toggle is true)
+  var commercialProjects = portfolioRoot
+  .Children()
+  .Where(x => x.IsVisible() && x.GetProperty("commercialProject")?.GetValue()?.ToString().ToLower() == "true")
+  .OrderByDescending(x => x.CreateDate)
+  .ToList();
+
+  // Retrieve domestic projects (where 'domesticProject' toggle is true)
+  var domesticProjects = portfolioRoot
+  .Children()
+  .Where(x => x.IsVisible() && x.GetProperty("domesticProject")?.GetValue()?.ToString().ToLower() == "true")
+  .OrderByDescending(x => x.CreateDate)
+  .ToList();
+
+  var projectRoot = Umbraco.Content(Guid.Parse("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12"));
+ 
+var parentNode = Umbraco.Content("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12");
+var recentProjects = parentNode.Children.Where(x => x.Value<bool>("isProject") == true).Take(3).ToList();
+
+
+
+  IHtmlContent RenderPortfolioProjectSection(IEnumerable<IPublishedContent> list)
+  {
+    var htmlContent = new StringBuilder();
+    foreach (var item in list)
+    {
+      var thumb = item.Value<MediaWithCrops>("thumb");
+      htmlContent.AppendLine("<div class='container-for-text hover-image'>");
+      htmlContent.AppendLine($"<a href='{item.Url()}' target='_blank'>");
+
+      if (thumb != null)
+      {
+        htmlContent.AppendLine($"<img src='{thumb.MediaUrl()}' alt='{item.Value("title")}' class='img-fluid'>");
+      }
+
+      htmlContent.AppendLine("<div class='centered-text-for-image centered-text-for-image-white'>");
+      htmlContent.AppendLine(item.Value("title").ToString());
+      htmlContent.AppendLine("</div>");
+      htmlContent.AppendLine("</a>");
+      htmlContent.AppendLine("</div>");
+    }
+    return new HtmlString(htmlContent.ToString());
+  }
+}
+
+
+<div class="hero-image text-center">
+      <img src="/media/2p1j5fai/bristol-wave-3.jpg" alt="TESTER" class="img-fluid">
+      <div class="serviceshero-text">
+        <p>Our Services
+        <p>
+      </div>
+    </div>
+
+
+<div class="row row-cols-4 text-center">
+  <div class="col">
+    <div class="sizing-portfolio-icons">
+      <img src="/media/micfpe1x/certificate.png" class="img-fluid">
+    </div>
+    <p>Over 40 years of experience</p>
+  </div>
+
+  <div class="col">
+    <div class="sizing-portfolio-icons">
+      <img src="/media/0qjfqdai/untitled-4.png" class="img-fluid">
+    </div>
+    <p>Over 5000+ completed projects</p>
+  </div>
+
+  <div class="col">
+    <div class="sizing-portfolio-icons">
+      <img src="/media/ocdpnpnd/trustdadsversion-1.png" class="img-fluid">
+    </div>
+    <p>Trusted by 18 industry leading clients</p>
+  </div>
+
+  <div class="col">
+    <div class="sizing-portfolio-icons">
+      <img src="/media/ficlohx0/untitled-3.png" class="img-fluid">
+    </div>
+    <p>Guaranteed safety with fully CITB certified staff</p>
+  </div>
+</div>
+
+<div>
+  <div class="slanteddoorstop back-darkpink">
+    <div class="whitetext">
+      <p>
+        At Sedgeman Scaffolding, we pride ourselves on delivering safe, reliable, and professional
+        scaffolding services across domestic, commercial, and specialist projects. With decades of
+        experience, we assure that our services are provided promptly at the highest standard.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="trapezoid-clip-black">
+  <div class="portfolio-sections-title">
+    <p>SPECIALIST Projects</p>
+  </div>
+</div>
+
+@if (specialistProjects.Count() > 0)
+{
+  <div class="customportfoliobackground black">
+    <div class="scroll-portfoliosmaller scroller-thumb-portfolio-dark scroll-black">
+      @Html.Raw(RenderPortfolioProjectSection(specialistProjects))
+    </div>
+  </div>
+}
+else
+{
+  <p>No specialist projects found.</p>
+}
+
+<div class="slanteddoorstop back-black"></div>
+
+<section id="commercial-portfolio">
+  <div class="trapezoid-clip-pink">
+    <div class="portfolio-sections-title">
+      <p>COMMERCIAL Projects</p>
+    </div>
+  </div>
+
+  @if (commercialProjects.Count() > 0)
+  {
+    <div class="customportfoliobackground lightpink">
+      <div class="scroll-portfoliosmaller scroller-thumb-portfolio-pink scroll-pink">
+        @Html.Raw(RenderPortfolioProjectSection(commercialProjects))
+      </div>
+    </div>
+  }
+  else
+  {
+    <p>No commercial projects found.</p>
+  }
+</section>
+<div>
+  <div class=" slanteddoorstop back-pink" </div>
+  </div>
+</div>
+
+<section id="domestic-services">
+  <div class="trapezoid-clip-lightgrey">
+    <div class="portfolio-sections-title">
+      <p>DOMESTIC Projects</p>
+    </div>
+  </div>
+</section>
+
+
+@if (domesticProjects.Any())
+{
+  <div class="customportfoliobackground lightgrey">
+    <ul class="uldomestic">
+      @foreach (var project in domesticProjects)
+      {
+        var thumb = project.Value<MediaWithCrops>("thumb"); // Assuming "thumb" is the image property
+        var projectTitle = project.Value<string>("title") ?? "Untitled Project"; // Fallback title
+
+        <li class="hoverable-project">
+          <figure>
+            @if (thumb != null)
+            {
+              <img src="@thumb.MediaUrl()" alt="@projectTitle" class="imgdomestic">
+            }
+            <figcaption>@projectTitle</figcaption>
+          </figure>
+        </li>
+      }
+    </ul>
+  </div>
+}
+else
+{
+  <p>No domestic projects found.</p>
+}
+
+<div>
+  <div class="upsidedown-slanted-box back-grey" </div>
+  </div>
+</div>
+
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="more-projects-section-title">MORE PROJECTS</h2>
+    <div class="white-to-pink-btn">
+      <a href="all-projects.html" class="btn" style="background-color: #e6007e; color: #fff;">See all projects</a>
+    </div>
+  </div>
+  <div class="projects-grid">
+    @foreach (var project in recentProjects.Take(3))  // Limit to 3 projects
+    {
+      var isProject = project.Value<bool>("isProject"); // Assuming 'isProject' is a boolean property
+      var thumb = project.Value<MediaWithCrops>("thumb");
+      var projectTitle = project.Value<string>("title") ?? "Untitled Project";
+      var projectUrl = project.Url();
+
+      // Only render the project if isProject is true
+      @if (isProject)
+      {
+        <div class="card more-project-card">  <!-- Added custom class here -->
+          <div class="card-body">
+            @if (thumb != null)
+            {
+              <img src="@thumb.MediaUrl()" class="more-inline" alt="@projectTitle">
+            }
+            <h5 class="card-title">@projectTitle</h5>
+            <a href="@projectUrl" class="btn" style="background-color: #e6007e; color: #fff;" target="_blank">View Project</a>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<hr class="custom-hr">
+
+<div class="row text-center g-0 mt-0">
+
+  <div class="col-12 col-sm-4">
+
+
+    <div id="xyz" name="xyz" class="card border-0">
+      <div style="max-width: 150px; max-height: 150px;margin:2rem auto;">
+        <img src="/media/yksbzrfc/quote-icon_150x150.png" class="card-img-top">
+      </div>
+      <div class="card-body">
+        <a href="https://www.surveymonkey.com/r/HZN5S3X" class="footer-btn">QUOTE REQUEST FORM</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-4">
+
+    <div class="card border-0">
+      <div style="max-width: 150px; max-height: 150px;margin:2rem auto;">
+        <img src="/media/05odxhuj/email_icon_150x150.png" alt="CONTACT INFORMATION" class="card-img-top">
+      </div>
+      <div class="card-body">
+        <a href="/contact-us" class="footer-btn">CONTACT INFORMATION</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-4">
+    <div class="card border-0">
+      <div style="max-width: 150px; max-height: 150px;margin:2rem auto;">
+        <img src="/media/sjmpijdo/map-_icon_150x150.png" class="card-img-top">
+      </div>
+
+      <div class="card-body">
+        <a href="/contact-us" class="footer-btn">YOU'LL FIND US HERE</a>
+      </div>
+    </div>
+  </div>
+</div>

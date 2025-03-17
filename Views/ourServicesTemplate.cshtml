@@ -1,0 +1,275 @@
+﻿@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Web.Common.PublishedModels
+@using Umbraco.Cms.Core.Media.EmbedProviders
+@using System.Text
+@using Umbraco.Cms.Core.Models.PublishedContent
+
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+
+@{
+  Layout = "master.cshtml";
+
+  // Fetch the "Services" parent node (defined once)
+  var servicesParent = Umbraco.Content(Guid.Parse("ee7c4209-afa6-4391-bdbe-3dad0321bded"));
+  var servicesSubPages = servicesParent?.Children() ?? Enumerable.Empty<IPublishedContent>();
+
+  // Fetch the "Portfolio" root node (defined once)
+  var portfolioRoot = Umbraco.Content(Guid.Parse("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12"));
+
+  // Fetch recent projects (defined once)
+  var recentProjects = portfolioRoot?.Children()
+  .Where(x => x.Value<bool>("isProject") == true)
+  .OrderByDescending(x => x.CreateDate)
+  .Take(3)
+  .ToList();
+
+  // Retrieve all children (projects) of the Portfolio page
+  var specialistProjects = portfolioRoot
+  .Children()
+  .Where(x => x.IsVisible() && x.GetProperty("specialistProject")?.GetValue()?.ToString().ToLower() == "true")
+  .OrderByDescending(r => r.CreateDate)
+  .ToList();
+
+  // Retrieve commercial projects (where 'commercialProject' toggle is true)
+  var commercialProjects = portfolioRoot
+  .Children()
+  .Where(x => x.IsVisible() && x.GetProperty("commercialProject")?.GetValue()?.ToString().ToLower() == "true")
+  .OrderByDescending(x => x.CreateDate)
+  .ToList();
+
+  // Retrieve domestic projects (where 'domesticProject' toggle is true)
+  var domesticProjects = portfolioRoot
+  .Children()
+  .Where(x => x.IsVisible() && x.GetProperty("domesticProject")?.GetValue()?.ToString().ToLower() == "true")
+  .OrderByDescending(x => x.CreateDate)
+  .ToList();
+
+  var projectRoot = Umbraco.Content(Guid.Parse("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12"));
+  var parentNode = Umbraco.Content("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12");
+
+  // Fetch all child services
+  var services = servicesParent?.Children() ?? Enumerable.Empty<IPublishedContent>();
+
+  // Get all child services under the "Services" parent
+  var serviceNodes = servicesParent?.Children() ?? Enumerable.Empty<IPublishedContent>();
+
+// Function to render service tiles using the provided styles and classes
+    IHtmlContent RenderServicesLinkSection(IEnumerable<IPublishedContent> list)
+    {
+        var htmlContent = new StringBuilder();  // Initialize StringBuilder for HTML content
+
+        // Loop through each item in the list
+        foreach (var item in list)
+        {
+            var typed = item.Value<MediaWithCrops>("thumb");
+            var title = item.Value<string>("title");
+            var url = item.Url();
+
+            htmlContent.AppendLine("<div class='col-12 col-md-4 mb-3'>");
+            htmlContent.AppendLine($"<a href='{url}' class='newservice-link'>");
+            htmlContent.AppendLine("<div class='newservice-card'>");
+
+            // Check if there is a thumbnail and add it
+            if (typed != null)
+            {
+                htmlContent.AppendLine($"<img src='{typed.MediaUrl()}' alt='{title}' class='img-fluid'>");
+            }
+
+            htmlContent.AppendLine("<div class='newoverlay'>");
+            htmlContent.AppendLine($"<h3>{title}</h3>");
+            htmlContent.AppendLine("</div>");
+
+            htmlContent.AppendLine("</div>"); // Close newservice-card div
+            htmlContent.AppendLine("</a>"); // Close link
+            htmlContent.AppendLine("</div>"); // Close column div
+        }
+
+        // If no services are found, show a message
+        if (!list.Any())
+        {
+            htmlContent.AppendLine("<p class='text-center'>No services available.</p>");
+        }
+
+        return new HtmlString(htmlContent.ToString());  // Return HTML content as HtmlString
+    }
+
+
+IHtmlContent RenderPortfolioProjectSection(IEnumerable<IPublishedContent> list)
+  {
+  var htmlContent = new StringBuilder();
+  foreach (var item in list)
+  {
+  var thumb = item.Value<MediaWithCrops>("thumb");
+    htmlContent.AppendLine("<div class='container-for-text hover-image'>");
+      htmlContent.AppendLine($"<a href='{item.Url()}' target='_blank'>");
+
+        if (thumb != null)
+        {
+        htmlContent.AppendLine($"<img src='{thumb.MediaUrl()}' alt='{item.Value("title")}' class='img-fluid'>");
+        }
+
+        htmlContent.AppendLine("<div class='centered-text-for-image centered-text-for-image-white'>");
+          htmlContent.AppendLine(item.Value("title").ToString());
+          htmlContent.AppendLine("</div>");
+        htmlContent.AppendLine("</a>");
+      htmlContent.AppendLine("</div>");
+    }
+    return new HtmlString(htmlContent.ToString());
+    }
+    }
+
+    <div class="hero-image text-center">
+      <img src="/media/jzflqspi/seo-domestic-bw.jpg" alt="TESTER" class="img-fluid">
+      <div class="serviceshero-text">
+        <p>Our Services
+        <p>
+      </div>
+    </div>
+
+    <div class="otherslanted-box">
+      <div class="whitetext allservices-text ">
+        <p>All Services</p>
+      </div>
+    </div>
+
+  <!--  THE LIST VERSION 
+<div class="container services-container">
+      <div class="row text-center">
+        <div class="services-list">
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            @foreach (var service in services)
+            {
+              <li>
+                <a href="@service.Url()">@service.Value("title")</a>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </div>-->
+
+
+    <!-- Service Tiles Section -->
+    <div class="container my-5">
+      <div class="row justify-content-center ">
+        @RenderServicesLinkSection(servicesSubPages)
+      </div>
+    </div>
+
+
+    
+
+    <div class="trapezoid-clip-pink" style="height: 150px; margin-top: 10%;">
+      <div class="portfolio-sections-title">
+        <p></p>
+      </div>
+    </div>
+
+    <div class="customportfoliobackground lightpink">
+      <div class="scroll-portfoliosmaller scroller-thumb-portfolio-pink scroll-pink">
+
+        @foreach (var service in serviceNodes)
+        {
+          // Fetch the thumb (image) and title from each service
+          var thumb = service.Value<MediaWithCrops>("thumb"); // Assuming "thumb" is the image property
+          var serviceTitle = service.Value<string>("title"); // Assuming "title" is the text property
+
+          // Check if thumb exists before rendering the image and link
+          if (thumb != null && serviceTitle != null)
+          {
+            <div class="container-for-text hover-image">
+              <a href="@service.Url()">
+                <img src="@thumb.MediaUrl()" alt="@serviceTitle">
+                <div class="centered-text-for-image">
+                  <span class="centered-text-for-image-white">@serviceTitle</span>
+                </div>
+              </a>
+            </div>
+
+          }
+        }
+      </div>
+    </div>
+
+    <div class="content-section">
+      <div class="vimeo-item-wide">
+        <iframe
+          src="https://player.vimeo.com/video/983049572?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+          frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
+          title="St Michaels Mount 2024">
+        </iframe>
+      </div>
+    </div>
+
+    <div class="container my-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="more-projects-section-title">MORE PROJECTS</h2>
+        <div class="white-to-pink-btn">
+          <a href="all-projects.html" class="btn" style="background-color: #e6007e; color: #fff;">See all projects</a>
+        </div>
+      </div>
+      <div class="projects-grid">
+        @foreach (var project in recentProjects.Take(3)) // Limit to 3 projects
+        {
+          var isProject = project.Value<bool>("isProject"); // Assuming 'isProject' is a boolean property
+          var thumb = project.Value<MediaWithCrops>("thumb");
+          var projectTitle = project.Value<string>("title") ?? "Untitled Project";
+          var projectUrl = project.Url();
+
+          // Only render the project if isProject is true
+          @if (isProject)
+          {
+            <div class="card more-project-card"> <!-- Added custom class here -->
+              <div class="card-body">
+                @if (thumb != null)
+                {
+                  <img src="@thumb.MediaUrl()" class="more-inline" alt="@projectTitle">
+                }
+                <h5 class="card-title">@projectTitle</h5>
+                <a href="@projectUrl" class="btn" style="background-color: #e6007e; color: #fff;" target="_blank">View
+                  Project</a>
+              </div>
+            </div>
+          }
+        }
+      </div>
+    </div>
+
+    <hr class="custom-hr">
+
+    <div class="row text-center g-0 mt-0">
+      <div class="col-12 col-sm-4">
+        <div id="xyz" name="xyz" class="card border-0">
+          <div style="max-width: 150px; max-height: 150px;margin:2rem auto;">
+            <img src="/media/yksbzrfc/quote-icon_150x150.png" class="card-img-top">
+          </div>
+          <div class="card-body">
+            <a href="https://www.surveymonkey.com/r/HZN5S3X" class="footer-btn">QUOTE REQUEST FORM</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-4">
+
+        <div class="card border-0">
+          <div style="max-width: 150px; max-height: 150px;margin:2rem auto;">
+            <img src="/media/05odxhuj/email_icon_150x150.png" alt="CONTACT INFORMATION" class="card-img-top">
+          </div>
+          <div class="card-body">
+            <a href="/contact-us" class="footer-btn">CONTACT INFORMATION</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-4">
+        <div class="card border-0">
+          <div style="max-width: 150px; max-height: 150px;margin:2rem auto;">
+            <img src="/media/sjmpijdo/map-_icon_150x150.png" class="card-img-top">
+          </div>
+
+          <div class="card-body">
+            <a href="/contact-us" class="footer-btn">YOU'LL FIND US HERE</a>
+          </div>
+        </div>
+      </div>
+    </div>

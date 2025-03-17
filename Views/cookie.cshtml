@@ -1,0 +1,57 @@
+﻿
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Umbraco.Cms.Core.Models.PublishedContent
+
+@{
+    Layout = "master.cshtml";
+
+    // Fetch the Cookie Policy content using GUID
+    var cookiePolicyPage = Umbraco.Content(Guid.Parse("0feec4fe-f5a0-43cb-a4c3-5392196a9300"));
+}
+
+@if (cookiePolicyPage != null)
+{
+    <section class="cookie-policy">
+        <h1>@cookiePolicyPage.Value("title")</h1> <!-- Main Title -->
+
+        <div class="content">
+            @cookiePolicyPage.Value("policytext") <!-- Main Cookie Policy Text -->
+        </div>
+
+        <!-- Cookie Sections -->
+        <section class="cookie-sections">
+            <h2>@cookiePolicyPage.Value("title1")</h2>
+
+            <article>
+                <h3>@cookiePolicyPage.Value("article1")</h3>
+                <p>@cookiePolicyPage.Value("cookiegrid1")</p>
+            </article>
+
+            <article>
+                <h3>@cookiePolicyPage.Value("article2")</h3>
+                <p>@cookiePolicyPage.Value("cookiegrid2")</p>
+            </article>
+
+            <article>
+                <h3>@cookiePolicyPage.Value("article3")</h3>
+                <p>@cookiePolicyPage.Value("cookiegrid3")</p>
+            </article>
+
+            <article>
+                <h3>@cookiePolicyPage.Value("article4")</h3>
+                <p>@cookiePolicyPage.Value("cookiegrid4")</p>
+            </article>
+
+            <article>
+                <h3>@cookiePolicyPage.Value("article5")</h3>
+            </article>
+        </section>
+    </section>
+}
+else
+{
+    <section>
+        <h1>Cookie Policy</h1>
+        <p>Cookie Policy content not found. Please check if the page exists in Umbraco.</p>
+    </section>
+}

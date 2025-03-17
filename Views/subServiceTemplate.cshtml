@@ -1,0 +1,42 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Umbraco.Cms.Core.Models.PublishedContent
+
+@{
+    Layout = "master.cshtml"; // Use the layout template
+
+    // Get the current page (service) by its ID
+    var currentService = Umbraco.AssignedContentItem;
+
+    // Fetch the title, images, and text for this service
+    var serviceTitle = currentService?.Value<string>("title") ?? "Untitled Service";
+    var serviceImages = currentService?.Value<IEnumerable<IPublishedContent>>("serviceimages");
+    var serviceText = currentService?.Value<string>("servicetext") ?? "No description provided.";
+}
+
+<div class="subservice-container">
+    <h2 class="subservice-title">@serviceTitle</h2>
+
+    <div class="subservice-text">
+        @Html.Raw(serviceText)
+    </div>
+
+
+    @if (serviceImages != null && serviceImages.Any())
+    {
+        <div class="subservice-image-inline ">
+            @foreach (var image in serviceImages)
+            {
+                <div class="subservice-image-item-inline">
+                    <figure>
+                        <img src="@image.Url()" alt="@serviceTitle" class="imgdomestic">
+                        <figcaption>@serviceTitle</figcaption>
+                    </figure>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="no-images-text">No images available for @serviceTitle.</p>
+    }
+</div>

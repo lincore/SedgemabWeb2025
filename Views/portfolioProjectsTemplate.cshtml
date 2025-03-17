@@ -1,0 +1,55 @@
+﻿@{
+	Layout = "master.cshtml";
+}
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Umbraco.Cms.Core.Models.PublishedContent
+
+@{
+    var serviceTitle = Model.Value<string>("title");
+    var serviceImages = Model.Value<IEnumerable<IPublishedContent>>("serviceimages");
+    var serviceText = Model.Value<string>("servicetext");
+}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1>@serviceTitle</h1>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        @if (serviceImages != null && serviceImages.Any())
+        {
+            <div id="serviceCarousel" class="carousel slide text-center" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @foreach (var image in serviceImages.Select((img, index) => new { img, index }))
+                    {
+                        <div class="carousel-item @(image.index == 0 ? "active" : "")">
+                            <img src="@image.img.Url()" class="d-block mx-auto rounded" alt="Carousel Image @(image.index + 1)"
+                                 style="max-height: 500px; width: auto; object-fit: cover;">
+                        </div>
+                    }
+                </div>
+
+                <!-- Custom Previous Button -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#serviceCarousel" data-bs-slide="prev">
+                    <span class="btn btn-dark px-3 py-2">Previous</span>
+                </button>
+
+                <!-- Custom Next Button -->
+                <button class="carousel-control-next" type="button" data-bs-target="#serviceCarousel" data-bs-slide="next">
+                    <span class="btn btn-dark px-3 py-2">Next</span>
+                </button>
+            </div>
+        }
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <p>@serviceText</p>
+        </div>
+    </div>
+</div>
+
+<!-- Ensure Bootstrap JS is included -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

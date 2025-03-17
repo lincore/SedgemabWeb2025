@@ -1,0 +1,179 @@
+﻿@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Media.EmbedProviders;
+@using NPoco.Expressions;
+
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "master.cshtml";
+}
+
+@{
+    // Retrieve all blog articles, ordered by creation date
+    var allblogarticles = Umbraco.Content(Guid.Parse("73847bcf-5ec7-4db7-9fb3-9d10d94021c7"))
+        .Children()
+        .Where(x => x.IsVisible())
+        .OrderByDescending(r => r.CreateDate)
+        .ToList();
+
+    // Get the latest blog article
+    var leadarticle = allblogarticles.FirstOrDefault(); // Get the latest article for the lead
+
+    var awards = Umbraco.Content(Guid.Parse("73847bcf-5ec7-4db7-9fb3-9d10d94021c7"))
+        .Children()
+        .Where(x => x.IsVisible() && x.GetProperty("isAward").GetValue().ToString().ToLower() == "true")
+        .OrderByDescending(r => r.CreateDate)
+        .ToList();
+
+    var latest = allblogarticles.OrderByDescending(r => r.CreateDate);
+}
+
+@* Render Lead Image for Latest Blog Article *@
+@{
+    void RenderLeader(IPublishedContent leadarticle)
+    {
+        if (leadarticle != null)
+        {
+            // Retrieve the thumbnail media for the lead article
+            var typedl = leadarticle.Value<MediaWithCrops>("thumb");
+
+            // Create a link around the featured section
+            <a href="@leadarticle.Url()" class="featured-link">
+                <section class="featured">
+                    @if (typedl != null)
+                    {
+                        <img src="@typedl.MediaUrl()" alt="featureimage" class="featured-image">
+                    }
+                    <div class="featured-text">
+                        <p>@Html.Raw(leadarticle.CreateDate.ToLongDateString())</p>
+                        <h2>@leadarticle.Value("title")</h2>
+                        <h3>@leadarticle.Value("shorttext")</h3>
+                    </div>
+                </section>
+            </a>
+        }
+        else
+        {
+            <p>No lead article available.</p>
+        }
+    }
+}
+
+
+@* Render the Lead Article Section *@
+@if (leadarticle != null)
+{
+    RenderLeader(leadarticle); // Render the lead article
+}
+
+@* Render the Latest Blog Articles Section *@
+@if (latest.Count() > 0)
+{
+    <section class="latest-articles">
+        <h2>Latest Articles</h2>
+        @{
+            RenderBlogSection(latest);
+        }
+    </section>
+}
+
+@* Render Awards Section *@
+@if (awards.Count() > 0)
+{
+    <section class="latest-articles">
+        <h2>Awards</h2>
+        @{
+            RenderBlogSection(awards);
+        }
+    </section>
+}
+
+@* Blog Section Helper *@
+@{
+    void RenderBlogSection(IEnumerable<IPublishedContent> list)
+    {
+        <div class="blog-container">
+            @foreach (var articleitem in list)
+            {
+                <div class="blog-item">
+                    @{
+                        var typed = articleitem.Value<MediaWithCrops>("thumb");
+                        if (typed != null)
+                        {
+                            <img src="@typed.MediaUrl()">
+                        }
+                    }
+                    <div class="blog-content">
+                        <h2>@articleitem.Value("title")</h2>
+                        <p class="read-more">
+                            <a href="@articleitem.Url()" class="no-underline">Read More</a>
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<hr class="custom-hr">
+
+<div class="row text-center g-0 mt-0">
+
+	<div class="col-12 col-sm-4">
+
+
+		<div id="xyz" name="xyz" class="card border-0">
+			<div style="max-width: 150px; max-height: 150px;margin:2rem auto;">
+				<img src="/media/yksbzrfc/quote-icon_150x150.png" class="card-img-top">
+			</div>
+			<div class="card-body">
+				<a href="https://www.surveymonkey.com/r/HZN5S3X" class="footer-btn">QUOTE REQUEST FORM</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-12 col-sm-4">
+
+		<div class="card border-0">
+			<div style="max-width: 150px; max-height: 150px;margin:2rem auto;">
+				<img src="/media/05odxhuj/email_icon_150x150.png" alt="CONTACT INFORMATION" class="card-img-top">
+			</div>
+			<div class="card-body">
+				<a href="/contact-us" class="footer-btn">CONTACT INFORMATION</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-12 col-sm-4">
+		<div class="card border-0">
+			<div style="max-width: 150px; max-height: 150px;margin:2rem auto;">
+				<img src="/media/sjmpijdo/map-_icon_150x150.png" class="card-img-top">
+			</div>
+
+			<div class="card-body">
+				<a href="/contact-us" class="footer-btn">YOU'LL FIND US HERE</a>
+			</div>
+		</div>
+	</div>
+</div>

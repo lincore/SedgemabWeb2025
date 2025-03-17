@@ -1,0 +1,536 @@
+﻿@using Microsoft.AspNetCore.Html
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using System.Text
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+  Layout = "master.cshtml";
+}
+@{
+  // Fetch the Portfolio page by GUID
+  var portfolioRoot = Umbraco.Content(Guid.Parse("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12"));
+
+  // Retrieve all children (projects) of the Portfolio page
+  var specialistProjects = portfolioRoot
+  .Children()
+  .Where(x => x.IsVisible() && x.GetProperty("specialistProject")?.GetValue()?.ToString().ToLower() == "true")
+  .OrderByDescending(r => r.CreateDate)
+  .ToList();
+
+  // Retrieve commercial projects (where 'commercialProject' toggle is true)
+  var commercialProjects = portfolioRoot
+  .Children()
+  .Where(x => x.IsVisible() && x.GetProperty("commercialProject")?.GetValue()?.ToString().ToLower() == "true")
+  .OrderByDescending(x => x.CreateDate)
+  .ToList();
+
+  // Retrieve domestic projects (where 'domesticProject' toggle is true)
+  var domesticProjects = portfolioRoot
+  .Children()
+  .Where(x => x.IsVisible() && x.GetProperty("domesticProject")?.GetValue()?.ToString().ToLower() == "true")
+  .OrderByDescending(x => x.CreateDate)
+  .ToList();
+
+  var projectRoot = Umbraco.Content(Guid.Parse("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12"));
+  
+var parentNode = Umbraco.Content("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12");
+var recentProjects = parentNode.Children.Where(x => x.Value<bool>("isProject") == true).Take(3).ToList();
+
+
+
+  IHtmlContent RenderPortfolioProjectSection(IEnumerable<IPublishedContent> list)
+  {
+    var htmlContent = new StringBuilder();
+    foreach (var item in list)
+    {
+      var thumb = item.Value<MediaWithCrops>("thumb");
+      htmlContent.AppendLine("<div class='container-for-text hover-image'>");
+      htmlContent.AppendLine($"<a href='{item.Url()}' target='_blank'>");
+
+      if (thumb != null)
+      {
+        htmlContent.AppendLine($"<img src='{thumb.MediaUrl()}' alt='{item.Value("title")}' class='img-fluid'>");
+      }
+
+      htmlContent.AppendLine("<div class='centered-text-for-image centered-text-for-image-white'>");
+      htmlContent.AppendLine(item.Value("title").ToString());
+      htmlContent.AppendLine("</div>");
+      htmlContent.AppendLine("</a>");
+      htmlContent.AppendLine("</div>");
+    }
+    return new HtmlString(htmlContent.ToString());
+  }
+}
+
+@section top {
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" async></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" async></script>
+
+}
+
+
+
+<div class="row">
+  <div class="col-12">
+    <div class="hero-image text-center">
+      <img src="/media/moxniwk0/man-engine-2016.jpg" alt="TESTER"
+        class="img-responsive">
+      <div class="serviceshero-text">
+        <p>About Us</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row ">
+  <div class="col-3 text-center">
+    <div class="sizing-portfolio-icons">
+      <img src="/media/micfpe1x/certificate.png" class="img-fluid ">
+    </div>
+    <p> Over 25 years of experience </p>
+  </div>
+
+  <div class="col-3 text-center">
+    <div class="sizing-portfolio-icons">
+      <img src="/media/i4qbb3o5/pin-icon.png" class="img-fluid ">
+    </div>
+    <P>Founded & Based in Cornwall </P>
+  </div>
+
+  <div class="col-3 text-center">
+    <div class="sizing-portfolio-icons">
+      <img src="/media/zgyp4gwd/builtonreputationicon.png" class="img-fluid ">
+    </div>
+    <P> Built on Reputation </p>
+  </div>
+
+  <div class="col-3 text-center">
+    <div class="sizing-portfolio-icons">
+      <img src="/media/lg0d35zr/40-employee-iconbigger_.png" class="img-fluid ">
+    </div>
+    <P> Over 40+ Trusted Employees </p>
+  </div>
+
+</div>
+
+<div class="container-fluid ">
+  <div class="contact-container text-center">
+
+    <img src="/media/kawlcn5d/pinkcircle.png" class="img-fluid contact-img" alt="#">
+  </div>
+</div>
+
+<div class="abouttext">
+  <p>Chris Sedgeman Scaffolding LTD, founded in 1996 by Chris Sedgeman, Steven Sedgeman and Steven
+    Wallis.
+    Our 3 founders were drawn together by shared philosophy focused on providing bespoke scaffolding solutions
+    prioritising high-quality workmanship and safety.
+    Over time, the company expanded significantly, incorporating two large scaffolding groups in December of 2000.
+    Today the company is recognised for its work across multiple sectors ,including large scale commercial and
+    domestic
+    projects.
+  </p>
+  <p>
+    With a commitment to safety Sedgeman has secured contracts with well-known clients such as the Ministry of
+    Defense,
+    Tate Gallery and National Grid.
+    Certified by leading industry bodies CITB, CHAS and NASC, Chris Sedgeman Scaffolding upholds rigourous standards
+    in
+    every project.
+    Our ethos revolves around a client-first approach, ensuring your prefrences and oncerns are adressed properly with
+    trust in every step we take
+  </p>
+</div>
+
+<div class=" transparent-bg">
+  <div class="d-flex justify-content-center">
+    <div class="mx-auto">
+      <a href="/about-us" class="btn btn-primary pink-button">A Timeline of our growth</a>
+    </div>
+  </div>
+</div>
+
+<div class=" transparent-bg">
+  <div class="d-flex justify-content-center">
+    <div class="widget">
+      <div class="home-projectstyle">
+        <p class="team-title">Meet The Team </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container text-center my-5">
+  <!-- Managing Director -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="leadershipcard border-0">
+        <img src="/media/44dfn3wd/blank_iconprofile.webp" class="img-fluid rounded-circle" alt="Managing Director">
+        <h3 class="mt-3">Chris Sedgeman <br><span class="small-title">Managing Director</span></h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Two Executives -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-12 col-md-6 col-lg-4 mb-3">
+      <div class="leadershipcard border-0">
+        <img src="/media/44dfn3wd/blank_iconprofile.webp" class="img-fluid rounded-circle" alt="Executive 1">
+        <h4 class="mt-3">Stephen Sedgeman <br><span class="small-title">Operations & Quotations Manager </span></h4>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 mb-3">
+      <div class="leadershipcard border-0">
+        <img src="/media/44dfn3wd/blank_iconprofile.webp" class="img-fluid rounded-circle" alt="Executive 2">
+        <h4 class="mt-3">Lynn Way <br><span class="small-title">Company Secretary, Financial Director, Safety, Health
+            & Enironmental Manager</span></h4>
+      </div>
+    </div>
+  </div>
+
+  <!-- Five Managers -->
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-6 col-lg-2 mb-3">
+      <div class="leadershipcard border-0">
+        <img src="/media/44dfn3wd/blank_iconprofile.webp" alt="Manager 1">
+        <h5 class="mt-2">Neil Stephens <br><span class="small-title">General Manager</h5>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-2 mb-3">
+      <div class="leadershipcard border-0">
+        <img src="/media/44dfn3wd/blank_iconprofile.webp" alt="Manager 2">
+        <h5 class="mt-2">David Battison <br><span class="small-title">Commercial Manager</h5>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-2 mb-3">
+      <div class="leadershipcard border-0">
+        <img src="/media/44dfn3wd/blank_iconprofile.webp" alt="Manager 3">
+        <h5 class="mt-2">Samantha Barrett <br><span class="small-title">Office Manager</h5>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-2 mb-3">
+      <div class="leadershipcard border-0">
+        <img src="/media/44dfn3wd/blank_iconprofile.webp" alt="Manager 4">
+        <h5 class="mt-2">Nicholas Hatton <br><span class="small-title">Fleet Manager</h5>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-2 mb-3">
+      <div class="leadershipcard border-0">
+        <img src="/media/44dfn3wd/blank_iconprofile.webp" alt="Manager 5">
+        <h5 class="mt-2">Luke McLean <br><span class="small-title">Yard Manager</h5>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="row col-12">
+  <div class="groundup-title">
+    <p>FROM THE GROUND UP</p>
+  </div>
+
+  <div class="timeline-container timeline-container--line">
+    <!-- Toggle Button -->
+    <button class="timeline-toggle" onclick="toggleTimeline()">
+      <div class="timeline-bigcircle">
+        A Timeline of Our Growth - Over 40 Years
+        <span id="dropdown-icon">▼</span>
+      </div>
+    </button>
+
+
+    <!-- Timeline Content -->
+    <div id="timelineContent" class="timeline--inner-container">
+
+      <div class="timeline-item" data-year="1996">
+        <div class="timeline-content">
+          <img src="/media/bfwbbrnt/1990mineicon.png" alt="Bottallack Mine">
+          <h3>1996 - Our First Project</h3>
+          <p>Bottallack mine in St. Just was Chris's first project. The logo reflects this strong connection to
+            Cornwall's mining heritage.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-year="2000">
+        <div class="timeline-content">
+          <img src="/media/w3lbr4fu/screenshot-2024-09-26-at-160233.png" alt="Incorporation">
+          <h3>2000 - Incorporation</h3>
+          <p>Growth in the late 90s led to the successful merge of two scaffolding groups, now forming the company's
+            foundation.</p>
+        </div>
+      </div>
+
+
+
+      <div class="timeline-item" data-year="2013">
+        <div class="timeline-content">
+          <img src="/media/oczmljj5/dscf0258.jpg" alt="Crofty Mine">
+          <h3>2013 - Crofty Mine</h3>
+          <p>One of the first large-scale specialist projects that we remain proud of!</p>
+        </div>
+      </div>
+      <div class="timeline-item" data-year="2014">
+        <div class="timeline-content">
+          <img src="/media/znqoudf5/specialist-dawlish-train.png" alt="Dawlish Railway">
+          <h3>2014 - Dawlish Railway</h3>
+          <p>Our specialist team worked on vital projects, cementing our reputation for bespoke solutions.</p>
+        </div>
+      </div>
+      <div class="timeline-item" data-year="2015">
+        <div class="timeline-content">
+          <img src="/media/aqxmpzcc/screenshot-2024-10-24-at-142520.png" alt="National Recognition">
+          <h3>2015 - National Recognition</h3>
+          <p>Winner of the 2015 Access and Specialist Scaffolding award, raising our profile significantly.</p>
+        </div>
+      </div>
+      <div class="timeline-item" data-year="2024">
+        <div class="timeline-content">
+          <img src="/media/lkbkyrkn/specialist-stmichaelsmount-2024-10-24-at-155752.png" alt="Large Projects">
+          <h3>2024 - Large Projects for Well-Known Clients</h3>
+          <p>Our current work involves significant heritage projects and bespoke solutions, including The Lloyds
+            project.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content-section">
+  <div class="row">
+    <div class="col pb-5">
+      <h2 class="services-title">Our Awards</h2>
+      <h3 class="award-header">Celebrating Success and Industry Recognition</h3>
+      <p class="service-text">
+        At Chris Sedgman Scaffolding, we take pride in delivering scaffolding solutions with a focus on safety,
+        reliability and innovation. Our dedication to excellence is reflected in the industry awards won below ,
+        showcasing our success and commitment to high standards. As proud members of the NASC (National Access
+        and
+        Scaffolding Confederation), we meet the strictest industry regulations, highlighting our position as a
+        leading
+        scaffolding company in the Soth West. These achievements demonstrate not only our success within
+        scaffolding
+        but
+        also the trust our clients place in us for projects of all sizes.
+      </p>
+    </div>
+  </div>
+
+  <div class="container w-80 mx-auto">
+    <div class="row justify-content-center my-2">
+      <div class="col-12 col-md-6 col-lg-4 mb-3">
+        <img class="img-fluid w-100" src="/media/a3ujlnxh/constructionnews20.png"
+          alt="constructionnews_chrissedgeman_specialistwinner_2022">
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 mb-3">
+        <img class="img-fluid w-100" src="/media/zhvjtjdb/constructionnewsawards2022.png"
+          alt="constructionnews_chrissedgeman_specialistwinner_2022">
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 mb-3">
+        <img class="img-fluid w-100" src="/media/24octauw/constructionnewsspecialistawards2022ceremony.png"
+          alt="constructionnews_chrissedgeman_specialistwinner_2022">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="colored-section pink">
+  <div class="d-flex justify-content-center">
+    <div class="widget">
+      <div class="home-projectstyle">
+        <p>Construction News<br> Awards</p>
+        <div class="mx-auto">
+          <a href="/blog" class="btn btn-primary pink-button ">Learn about our awards</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pinkbackgroud-container">
+  <div class="diagonal-container bg-white">
+    <div class="img-float">
+      <img src="/media/qviovlbc/cn-2013.png" alt="2013 CN Award  1" class="img-fluid">
+    </div>
+    <div class="img-float"><img src="/media/3hrfr15a/cn-2014.png" alt="2014 CN Award 2" class="img-fluid">
+    </div>
+    <div class="img-float"><img src="/media/thzbmx4s/cn-2015.png" alt="2015 CN Award 3" class="img-fluid expand-image">
+    </div>
+    <div class="img-float"><img src="/media/2zenlh5v/cn-2022-specialstoty_.png" alt="2022 CN Award 4"
+        class="img-fluid expand-imagelogos">
+    </div>
+    <div class="img-float"><img src="/media/hk0b22ja/cn-2022-pty.png" alt="2022 CN Award 5 "
+        class="img-fluid expand-imagelogos "></div>
+    <div class="img-float"><img src="/media/1fwnxl5x/cn-2024-specialstoty_.png" alt="2024 CN Award 6"
+        class="img-fluid expand-imagelogos ">
+    </div>
+  </div>
+</div>
+
+<div class="colored-section pink">
+  <div class="d-flex justify-content-center">
+    <div class="widget">
+      <div class="home-projectstyle">
+        <p>NASC Awards <br> </p>
+        <div class="mx-auto">
+          <a href="/blog" class="btn btn-primary pink-button ">Learn about our awards</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pinkbackgroud-container">
+  <div class="diagonal-container bg-white" style="padding-bottom: 5rem;">
+    <div class="img-float">
+      <img src="/media/gnuho3uk/nasc2018-president-2_.png" alt="2018  NASC President 1" class="img-fluid">
+    </div>
+    <div class="img-float"><img src="/media/qebhf2j4/nasc2018-5-mill-2-_.png" alt="2018 NASC 5mill 2" class="img-fluid">
+    </div>
+    <div class="img-float"><img src="/media/dlep2h4u/nasc2022-hs.png" alt="2022 NASC H&S 3" class="img-fluid ">
+    </div>
+    <div class="img-float"><img src="/media/kzxd3frz/nasc2022-poty_.png" alt="2022 NASC POTY 4" class="img-fluid ">
+    </div>
+    <div class="img-float"><img src="/media/kynfv1w0/nasc2024-poty_.png" alt="2024 NASC POTY 5 " class="img-fluid  ">
+    </div>
+    <div class="img-float"><img src="javascript:void(0);" alt="" class="img-fluid  ">
+    </div>
+  </div>
+</div>
+
+
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="more-projects-section-title">MORE PROJECTS</h2>
+    <div class="white-to-pink-btn">
+      <a href="all-projects.html" class="btn" style="background-color: #e6007e; color: #fff;">See all projects</a>
+    </div>
+  </div>
+  <div class="projects-grid">
+    @foreach (var project in recentProjects.Take(3))  // Limit to 3 projects
+    {
+      var isProject = project.Value<bool>("isProject"); // Assuming 'isProject' is a boolean property
+      var thumb = project.Value<MediaWithCrops>("thumb");
+      var projectTitle = project.Value<string>("title") ?? "Untitled Project";
+      var projectUrl = project.Url();
+
+      // Only render the project if isProject is true
+      @if (isProject)
+      {
+        <div class="card more-project-card">  <!-- Added custom class here -->
+          <div class="card-body">
+            @if (thumb != null)
+            {
+              <img src="@thumb.MediaUrl()" class="more-inline" alt="@projectTitle">
+            }
+            <h5 class="card-title">@projectTitle</h5>
+            <a href="@projectUrl" class="btn" style="background-color: #e6007e; color: #fff;" target="_blank">View Project</a>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>
+
+
+<hr class="custom-hr">
+
+<div class="row text-center g-0 mt-0">
+  <div class="col-12 col-sm-4">
+    <div id="xyz" name="xyz" class="card border-0">
+      <div style="max-width: 150px; max-height: 150px;margin:2rem auto;">
+        <img src="/media/yksbzrfc/quote-icon_150x150.png" class="card-img-top">
+      </div>
+      <div class="card-body">
+        <a href="https://www.surveymonkey.com/r/HZN5S3X" class="footer-btn">QUOTE REQUEST FORM</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-4">
+    <div class="card border-0">
+      <div style="max-width: 150px; max-height: 150px;margin:2rem auto;">
+        <img src="/media/05odxhuj/email_icon_150x150.png" alt="CONTACT INFORMATION" class="card-img-top">
+      </div>
+      <div class="card-body">
+        <a href="/contact-us" class="footer-btn">CONTACT INFORMATION</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-4">
+    <div class="card border-0">
+      <div style="max-width: 150px; max-height: 150px;margin:2rem auto;">
+        <img src="/media/sjmpijdo/map-_icon_150x150.png" class="card-img-top">
+      </div>
+
+      <div class="card-body">
+        <a href="/contact-us" class="footer-btn">YOU'LL FIND US HERE</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+
+  ((gsap, ScrollTrigger) => {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.utils.toArray(".timeline-item").forEach((item) => {
+      gsap.from(item, {
+        opacity: 0,
+        y: 100,
+        duration: 1,
+        scrollTrigger: {
+          trigger: item,
+          start: "top 80%",
+          toggleActions: "play none none reverse"
+        }
+      });
+    });
+  })(gsap, ScrollTrigger);
+  <
+</script>
+
+<script>
+
+ function toggleTimeline() { 
+    const timelineContent = document.getElementById("timelineContent");
+    const dropdownIcon = document.getElementById("dropdown-icon");
+    
+    if (timelineContent.classList.contains("show")) {
+        timelineContent.style.maxHeight = "0px";
+        timelineContent.style.opacity = "0";
+        timelineContent.classList.remove("show");
+
+        // Force reflow for ::before elements
+        document.querySelectorAll(".timeline-item::before").forEach(item => {
+            item.style.opacity = "0";
+        });
+
+        setTimeout(() => {
+            timelineContent.style.display = "none";
+        }, 500); // Wait for transition to end
+        dropdownIcon.style.transform = "rotate(0deg)";
+    } else {
+        timelineContent.style.display = "block";
+        setTimeout(() => {
+            timelineContent.style.maxHeight = timelineContent.scrollHeight + "px"; 
+            timelineContent.style.opacity = "1";
+
+            // Make sure year labels reappear
+            document.querySelectorAll(".timeline-item::before").forEach(item => {
+                item.style.opacity = "1";
+            });
+        }, 10);
+
+        timelineContent.classList.add("show");
+        dropdownIcon.style.transform = "rotate(180deg)";
+    }
+}
+
+</script>

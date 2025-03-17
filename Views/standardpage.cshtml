@@ -1,8 +1,11 @@
 ﻿@using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
-	Layout = "Master.cshtml";
+	Layout = "master.cshtml";
 }
 
 
 standard page template 
+
+
+<p>@Model.Value("leadtext")</p>

@@ -50,6 +50,21 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		// properties
 
 		///<summary>
+		/// altfoooer
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "14.3.1+6caf53e")]
+		[ImplementPropertyType("altfoooer")]
+		public virtual bool Altfoooer => this.Value<bool>(_publishedValueFallback, "altfoooer");
+
+		///<summary>
+		/// htmlcontent
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "14.3.1+6caf53e")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("htmlcontent")]
+		public virtual string Htmlcontent => this.Value<string>(_publishedValueFallback, "htmlcontent");
+
+		///<summary>
 		/// keywords
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "14.3.1+6caf53e")]
@@ -82,12 +97,12 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string Metadescription => this.Value<string>(_publishedValueFallback, "metadescription");
 
 		///<summary>
-		/// primaryImage
+		/// thumb
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "14.3.1+6caf53e")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("primaryImage")]
-		public virtual global::Umbraco.Cms.Core.PropertyEditors.ValueConverters.ImageCropperValue PrimaryImage => this.Value<global::Umbraco.Cms.Core.PropertyEditors.ValueConverters.ImageCropperValue>(_publishedValueFallback, "primaryImage");
+		[ImplementPropertyType("thumb")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops Thumb => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "thumb");
 
 		///<summary>
 		/// title
