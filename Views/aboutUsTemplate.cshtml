@@ -5,64 +5,87 @@
 @using System.Text
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
-  Layout = "master.cshtml";
+    Layout = "master.cshtml";
+     var rootkeyvalue = Umbraco.Content(Guid.Parse("4b0ce668-2d71-4f99-b7c6-e7c50f1b2ed1"));
+
 }
 @{
 
- var aboutusContent = Umbraco.Content(Guid.Parse("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12"));
 
 
-  // Fetch the Portfolio page by GUID
-  var portfolioRoot = Umbraco.Content(Guid.Parse("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12"));
-
-  // Retrieve all children (projects) of the Portfolio page
-  var specialistProjects = portfolioRoot
-  .Children()
-  .Where(x => x.IsVisible() && x.GetProperty("specialistProject")?.GetValue()?.ToString().ToLower() == "true")
-  .OrderByDescending(r => r.CreateDate)
-  .ToList();
-
-  // Retrieve commercial projects (where 'commercialProject' toggle is true)
-  var commercialProjects = portfolioRoot
-  .Children()
-  .Where(x => x.IsVisible() && x.GetProperty("commercialProject")?.GetValue()?.ToString().ToLower() == "true")
-  .OrderByDescending(x => x.CreateDate)
-  .ToList();
-
-  // Retrieve domestic projects (where 'domesticProject' toggle is true)
-  var domesticProjects = portfolioRoot
-  .Children()
-  .Where(x => x.IsVisible() && x.GetProperty("domesticProject")?.GetValue()?.ToString().ToLower() == "true")
-  .OrderByDescending(x => x.CreateDate)
-  .ToList();
-
-  var projectRoot = Umbraco.Content(Guid.Parse("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12"));
-
-  var parentNode = Umbraco.Content("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12");
-  var recentProjects = parentNode.Children.Where(x => x.Value<bool>("isProject") == true).Take(3).ToList();
+    var aboutusContent = Umbraco.Content(Guid.Parse("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12"));
 
 
+    // Fetch the Portfolio page by GUID
+    var portfolioRoot = Umbraco.Content(Guid.Parse("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12"));
 
-  IHtmlContent RenderPortfolioProjectSection(IEnumerable<IPublishedContent> list)
-  {
-    var htmlContent = new StringBuilder();
-    foreach (var item in list)
+    // Retrieve all children (projects) of the Portfolio page
+    var specialistProjects = portfolioRoot
+    .Children()
+    .Where(x => x.IsVisible() && x.GetProperty("specialistProject")?.GetValue()?.ToString().ToLower() == "true")
+    .OrderByDescending(r => r.CreateDate)
+    .ToList();
+
+    // Retrieve commercial projects (where 'commercialProject' toggle is true)
+    var commercialProjects = portfolioRoot
+    .Children()
+    .Where(x => x.IsVisible() && x.GetProperty("commercialProject")?.GetValue()?.ToString().ToLower() == "true")
+    .OrderByDescending(x => x.CreateDate)
+    .ToList();
+
+    // Retrieve domestic projects (where 'domesticProject' toggle is true)
+    var domesticProjects = portfolioRoot
+    .Children()
+    .Where(x => x.IsVisible() && x.GetProperty("domesticProject")?.GetValue()?.ToString().ToLower() == "true")
+    .OrderByDescending(x => x.CreateDate)
+    .ToList();
+
+    var projectRoot = Umbraco.Content(Guid.Parse("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12"));
+
+    var parentNode = Umbraco.Content("4a1e1eb5-e4fd-4e1c-920a-dcb683362a12");
+    var recentProjects = parentNode.Children.Where(x => x.Value<bool>("isProject") == true).Take(3).ToList();
+
+
+
+    IHtmlContent RenderPortfolioProjectSection(IEnumerable<IPublishedContent> list)
     {
-      var thumb = item.Value<MediaWithCrops>("thumb");
-      htmlContent.AppendLine("<div class='container-for-text hover-image'>");
-      htmlContent.AppendLine($"<a href='{item.Url()}' target='_blank'>");
+        var htmlContent = new StringBuilder();
+        foreach (var item in list)
+        {
 
-      if (thumb != null)
-      {
-        htmlContent.AppendLine($"<img src='{thumb.MediaUrl()}' alt='{item.Value("title")}' class='img-fluid'>");
-      }
+            if (item is not null)
+            {
 
-      htmlContent.AppendLine("<div class='centered-text-for-image centered-text-for-image-white'>");
-      htmlContent.AppendLine(item.Value("title").ToString());
-      htmlContent.AppendLine("</div>");
-      htmlContent.AppendLine("</a>");
-      htmlContent.AppendLine("</div>");
-    }
+                var thumb = item.Value<MediaWithCrops>("thumb");
+
+                htmlContent.AppendLine("<div class='container-for-text hover-image'>");
+
+                htmlContent.AppendLine($"<a href='{item.Url()}' target='_blank'>");
+
+
+
+                if (thumb != null)
+
+                {
+
+                    htmlContent.AppendLine($"<img src='{thumb.MediaUrl()}' alt='{item.Value("title")}' class='img-fluid'>");
+
+                }
+
+
+
+                htmlContent.AppendLine("<div class='centered-text-for-image centered-text-for-image-white'>");
+
+                htmlContent.AppendLine(item.Value("title").ToString());
+
+                htmlContent.AppendLine("</div>");
+
+                htmlContent.AppendLine("</a>");
+
+                htmlContent.AppendLine("</div>");
+
+            }
+        }
     return new HtmlString(htmlContent.ToString());
   }
 }
@@ -118,24 +141,15 @@
 
 </div>
 
-<div class="container-fluid ">
-  <div class="contact-container text-center">
+<div class="home-pinksection">
 
-    <img src="/media/kawlcn5d/pinkcircle.png" class="img-fluid contact-img" alt="#">
-  </div>
+@if(rootkeyvalue is not null){
+	<div class="main-text">
+		@rootkeyvalue.Value("AboutSince")
+	 </div>
+	}
 </div>
 
-<div class="abouttext pb-4">
- @aboutusContent.Value("htmlcontent")
-</div>
-
-<div class=" transparent-bg">
-  <div class="d-flex justify-content-center">
-    <div class="mx-auto">
-      <a href="/about-us" class="btn btn-primary pink-button">A Timeline of our growth</a>
-    </div>
-  </div>
-</div>
 
 <div class=" transparent-bg">
   <div class="d-flex justify-content-center">
@@ -181,31 +195,31 @@
     <div class="col-12 col-sm-6 col-lg-2 mb-3">
       <div class="leadershipcard border-0">
         <img src="/media/44dfn3wd/blank_iconprofile.webp" alt="Manager 1">
-        <h5 class="mt-2">Neil Stephens <br><span class="small-title">General Manager</h5>
+        <h5 class="mt-2">Neil Stephens <br><span class="small-title">General Manager</span></h5>
       </div>
     </div>
     <div class="col-12 col-sm-6 col-lg-2 mb-3">
       <div class="leadershipcard border-0">
         <img src="/media/44dfn3wd/blank_iconprofile.webp" alt="Manager 2">
-        <h5 class="mt-2">David Battison <br><span class="small-title">Commercial Manager</h5>
+        <h5 class="mt-2">David Battison <br><span class="small-title">Commercial Manager</span></h5>
       </div>
     </div>
     <div class="col-12 col-sm-6 col-lg-2 mb-3">
       <div class="leadershipcard border-0">
         <img src="/media/44dfn3wd/blank_iconprofile.webp" alt="Manager 3">
-        <h5 class="mt-2">Samantha Barrett <br><span class="small-title">Office Manager</h5>
+        <h5 class="mt-2">Samantha Barrett <br><span class="small-title">Office Manager</span></h5>
       </div>
     </div>
     <div class="col-12 col-sm-6 col-lg-2 mb-3">
       <div class="leadershipcard border-0">
         <img src="/media/44dfn3wd/blank_iconprofile.webp" alt="Manager 4">
-        <h5 class="mt-2">Nicholas Hatton <br><span class="small-title">Fleet Manager</h5>
+        <h5 class="mt-2">Nicholas Hatton <br><span class="small-title">Fleet Manager</span></h5>
       </div>
     </div>
     <div class="col-12 col-sm-6 col-lg-2 mb-3">
       <div class="leadershipcard border-0">
         <img src="/media/44dfn3wd/blank_iconprofile.webp" alt="Manager 5">
-        <h5 class="mt-2">Luke McLean <br><span class="small-title">Yard Manager</h5>
+        <h5 class="mt-2">Luke McLean <br><span class="small-title">Yard Manager</span></h5>
       </div>
     </div>
   </div>
@@ -221,12 +235,12 @@
 
   <div class="timeline-container timeline-container--line">
     <!-- Toggle Button -->
-    <button class="timeline-toggle" onclick="toggleTimeline()">
+    <div class="timeline-toggle" onclick="toggleTimeline()">
       <div class="timeline-bigcircle">
         A Timeline of Our Growth - Over 40 Years
         <span id="dropdown-icon">▼</span>
       </div>
-    </button>
+    </div>
 
 
     <!-- Timeline Content -->
@@ -290,20 +304,17 @@
     <div class="col pb-5">
       <h2 class="services-title">Our Awards</h2>
       <h3 class="award-header">Celebrating Success and Industry Recognition</h3>
-      <p class="service-text">
-        At Chris Sedgeman Scaffolding, we take pride in delivering scaffolding solutions with a focus on safety,
-        reliability and innovation. Our dedication to excellence is reflected in the industry awards won below ,
-        showcasing our success and commitment to high standards. As a proud member of the NASC (National Access
-        and
-        Scaffolding Confederation), we meet the strictest industry regulations, highlighting our position as a
-        leading
-        scaffolding company in the South West. These achievements demonstrate not only our success within
-        scaffolding
-        but
-        also the trust our clients place in us for projects of all sizes.
-      </p>
-    </div>
+      <div class="service-text">
+        @if(rootkeyvalue is not null){
+	        <div class="main-text">
+		            @rootkeyvalue.Value("AboutAwardsatSedgeman")
+	        </div>
+	       }
+      </div>
+    </div>      
   </div>
+</div>
+
 
   <div class="container w-80 mx-auto">
     <div class="row justify-content-center my-2">
@@ -321,7 +332,7 @@
       </div>
     </div>
   </div>
-</div>
+
 
 <div class="colored-section pink">
   <div class="d-flex justify-content-center">
@@ -460,13 +471,14 @@
     </div>
   </div>
 </div>
-</div>
+
 
 <script>
 
   ((gsap, ScrollTrigger) => {
     gsap.registerPlugin(ScrollTrigger);
-    gsap.utils.toArray(".timeline-item").forEach((item) => {
+   
+    gsap.utils.toArray(".timeline-item").forEach( (item) => {
       gsap.from(item, {
         opacity: 0,
         y: 100,
@@ -478,8 +490,9 @@
         }
       });
     });
+
   })(gsap, ScrollTrigger);
-  <
+  
 </script>
 
 <script>

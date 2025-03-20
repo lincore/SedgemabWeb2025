@@ -12,6 +12,9 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
   Layout = "master.cshtml";
+
+    var rootkeyvalue = Umbraco.Content(Guid.Parse("4b0ce668-2d71-4f99-b7c6-e7c50f1b2ed1"));
+
 }
 @{
   // Fetch the Portfolio page by GUID
@@ -111,15 +114,18 @@ var recentProjects = parentNode.Children.Where(x => x.Value<bool>("isProject") =
 
 <div>
   <div class="slanteddoorstop back-darkpink">
-    <div class="whitetext">
-      <p>
-        At Sedgeman Scaffolding, we pride ourselves on delivering safe, reliable, and professional
-        scaffolding services across domestic, commercial, and specialist projects. With decades of
-        experience, we can assure you that our services are provided promptly and at the highest standard.
-      </p>
-    </div>
-  </div>
+    
+    @if (rootkeyvalue is not null)
+    {
+        <div class="whitetext">
+            @rootkeyvalue.Value("PortfolioAtSedgeman")
+        </div>
+    }
 </div>
+</div>
+
+
+
 
 <div class="trapezoid-clip-black">
   <div class="portfolio-sections-title">
@@ -162,9 +168,9 @@ else
     <p>No commercial projects found.</p>
   }
 </section>
+
 <div>
-  <div class=" slanteddoorstop back-pink" </div>
-  </div>
+  <div class="slanteddoorstop back-pink"> </div>
 </div>
 
 <section id="domestic-services">
@@ -204,8 +210,8 @@ else
 }
 
 <div>
-  <div class="upsidedown-slanted-box back-grey" </div>
-  </div>
+  <div class="upsidedown-slanted-box back-grey"> </div>
+
 </div>
 
 <div class="container my-5">

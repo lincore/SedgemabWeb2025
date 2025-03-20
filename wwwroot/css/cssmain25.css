@@ -47,12 +47,12 @@
 }
 
 .l2r-angle {
-    rotate: 45deg;
+
     -webkit-transform: rotate(45deg);
 }
 
 .r2l-angle {
-    rotate: -45deg;
+
     -webkit-transform: rotate(-45deg);
 }
 
@@ -362,7 +362,7 @@ a:hover {
 
 .mb-10 {
     margin-top: 10rem;
-    ;
+    
 }
 
 .footer-container {
@@ -750,7 +750,7 @@ h1 {
     font-size: 16px;
     padding: 10px 20px;
     border: none;
-    position: left;
+    position: relative;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -1109,7 +1109,7 @@ h1 {
     vertical-align: top;
     background-color: #e6007e;
     color: white;
-    width: 10;
+    width: 10px;
     height: 100%;
     max-width: auto;
     max-height: auto;
@@ -1217,7 +1217,7 @@ h1 {
 @media (max-width: 576px) {
     .image-gallery img {
         width: 100%;
-        height
+        height:auto;
     }
 
     .image-gallery img {
@@ -1329,7 +1329,7 @@ h1 {
     padding: 2rem;
     margin: 0;
     height: 10rem;
-    ;
+    
 
 
 }
@@ -1920,7 +1920,7 @@ p#herotextsmall {
 
 .customportfoliobackground {
 
-    padding: ;
+
 }
 
 .portfolio-sections-title {
@@ -2019,7 +2019,8 @@ div.scroll-portfolio img {
 }
 
 .scroll-portfoliosmaller-size {
-    font-size: calc(0.2vw + 1em) color: white;
+    font-size: calc(0.2vw + 1em) ;
+    color: white;
     padding: 5px 10px;
 
     border-radius: 5px;
@@ -3114,7 +3115,7 @@ figcaption {
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-    background-color: 0000; /* Black arrows */
+    background-color: #000; /* Black arrows */
 }
 
 
