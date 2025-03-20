@@ -7,14 +7,13 @@
 @{
 	Layout = "master.cshtml";
 
+	 var rootkeyvalue = Umbraco.Content(Guid.Parse("4b0ce668-2d71-4f99-b7c6-e7c50f1b2ed1"));
+
 }
 
 @{
 
-
 	var rootpagedata = Umbraco.Content(Guid.Parse("c2da9be4-49d2-468e-9f0c-fa009cf1f023"));
-
-
 
 	void RenderRootSection(IPublishedContent? rootContent)
 	{
@@ -36,6 +35,7 @@
 				}
 			}
 		}
+
 	}
 
 	void RenderBlogSection(IEnumerable<IPublishedContent> list)
@@ -79,9 +79,7 @@
 				</div>
 			</div>
 		}
-
 	}
-
 
 	void RenderServicesLinkSection(IEnumerable<IPublishedContent> list)
 	{
@@ -106,9 +104,6 @@
 			</div>
 		}
 	}
-
-
-
 
 	void RenderLeader(IPublishedContent leadarticle)
 	{
@@ -140,9 +135,7 @@
 			</div>
 		</div>
 	}
-
 }
-
 
 <div class="hero-image text-center">
 	<img src="/media/p0peths2/st-michaels-24-2.jpg" alt="TESTER" class="img-fluid">
@@ -181,6 +174,17 @@
 	</div>
 </div>
 
+
+<div class="home-pinksection">
+
+@if(rootkeyvalue is not null){
+	<div class="main-text">
+		@rootkeyvalue.Value("weProvideText")
+	 </div>
+	}
+</div>
+
+<!--
 <div class="home-pinksection">
 	<p class="main-text">
 		We provide access scaffolding for <span class="highlighted">Domestic, Commercial,</span> and <span
@@ -193,8 +197,7 @@
 			designer</span>.
 	</p>
 </div>
-
-<div>
+-->
 	<div class="colored-section black">
 		<div class="d-flex justify-content-end">
 			<div class="widget">
@@ -207,7 +210,6 @@
 			</div>
 		</div>
 	</div>
-
 
 	<div class="about-us-title">
 		<div class="black-container">
@@ -244,35 +246,32 @@
 					<p class="img-title">Water Works</p>
 				</div>
 
-
 			</div>
 		</div>
 	</div>
 
 
-	<div class="container w-80 mx-auto">
-
-		<div class="row justify-content-center my-2 gap2">
+<div class="row justify-content-center my-2 gap2">
 
 			@{
 				RenderRootSection(rootpagedata);
 			}
 
+			</div>
+	<div class="home-pinksection">
+
+	
 			<div class="content-section">
 				<div class="row">
 					<div class="col pb-5">
 						<h2 class="services-title">OUR SERVICES</h2>
-						<p class="service-text">
-							Whether you're working on a small residential project, a specialist project, or a
-							large-scale
-							commercial
-							development, we believe that the trust and loyalty of our clients are the foundation of our
-							continued
-							growth and success. Your project is our priority, and we stand by our reputation for quality
-							and
-							service
-							built over decades.
-						</p>
+						 <div class="service-text">
+							@if(rootkeyvalue is not null){
+							<div class="main-text">
+								@rootkeyvalue.Value("OurServicesText")
+
+						 </div>
+							}
 					</div>
 				</div>
 
@@ -300,29 +299,23 @@
 			</div>
 		</div>
 
-	</div>
-
-	<div class=" oldheritage">
+	
 
 		<div class="home-projectstyle"> Our Heritage </div>
+		<div class="service-text">
+			@if(rootkeyvalue is not null){
+			<div class="main-text">
+				@rootkeyvalue.Value("OurHeritageText")
+			</div>
+			}
+			</div>
+		</div>
 
-
-		<p class="service-text">
-			Founded in 1996 by Chris Sedgeman, our scaffolding company started with a shared vision of providing reliable and safe scaffolding
-			solutions. Over the years, our commitment to quality and safety has helped us grow into a trusted
-			industry leader.
-
-			Today, with a dedicated team of over 40 skilled employees and continuing to expand, we remain
-			focused on delivering exceptional service to projects of all sizes. Our strong foundation based on family values and
-			teamwork continues to drive our growth and success.
-		</p>
-	</div>
-
-
+	</div>	
 
 	<div class="pinkbackgroud-container">
 		<div class="d-flex justify-content-end">
-			<a href=" /about-us" class="whitetoblackbutton"> Find out more </output></a>
+			<a href=" /about-us" class="whitetoblackbutton"> Find out more </a>
 		</div>
 		<div class="diagonal-container bg-white">
 
@@ -351,8 +344,10 @@
 	</div>
 
 	<div class="excellence">
-		<div class="since96 " <h2>Scaffolding Exellence Since 96'</h2>
-		</div>
+		<div class="since96 ">
+		<h2 >Scaffolding Exellence Since 96'</h2></div>
+
+		
 		<div class="d-flex justify-content-start">
 			<a href=" /about-us" class="read-more">About our History of Success</a>
 		</div>
