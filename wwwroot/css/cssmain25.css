@@ -1265,6 +1265,7 @@ h1 {
     font-weight: bold;
     display: inline-block;
     transition: background-color 0.3s ease-in;
+    font-size:1rem;
 }
 
 .portfolio-button:hover {
@@ -3205,4 +3206,14 @@ figcaption {
     flex-direction: column;
     justify-content: space-between;
     flex-grow: 1;
+}
+
+
+.company-history {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #333;
+    padding: 5%;
+    background: #f9f9f9;
+    border-radius: 8px;
 }
